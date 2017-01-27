@@ -1,7 +1,7 @@
 package assimp
 
 /*
-#cgo linux LDFLAGS: -L/usr/local/lib -lassimp -lstdc++
+#cgo pkg-config: assimp
 #include <assimp/material.h>
 #include <stdlib.h>
 */

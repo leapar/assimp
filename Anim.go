@@ -1,6 +1,6 @@
 package assimp
 
-//#cgo linux LDFLAGS: -L/usr/local/lib -lassimp -lstdc++
+//#cgo pkg-config: assimp
 //#include <assimp/anim.h>
 import "C"
 
