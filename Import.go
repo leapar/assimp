@@ -7,6 +7,7 @@ package assimp
 import "C"
 
 import (
+	"fmt"
 	"reflect"
 	"unsafe"
 )
@@ -30,7 +31,7 @@ func ImportFile(file string, flags uint) *Scene {
 	return (*Scene)(C.aiImportFile(pFile, C.uint(flags)))
 }
 
-func ImportFileEx(file string, flags uint)
+//func ImportFileEx(file string, flags uint)
 
 //garbage collection prevention
 type logStream C.struct_aiLogStream
@@ -203,8 +204,9 @@ func (p *PropertyStore) SetPropertyInteger(name string, value int) {
 
 func (p *PropertyStore) SetPropertyFloat(name string, value float32) {
 	szName := C.CString(name)
+	fmt.Println("OKKK")
 	defer C.free(unsafe.Pointer(szName))
-	C.aiSetImportPropertyFloat((*C.struct_aiPropertyStore)(p), szName, C.float(value))
+	C.aiSetImportPropertyFloat((*C.struct_aiPropertyStore)(p), szName, C.ai_real(value))
 }
 
 func (p *PropertyStore) SetPropertyString(name string, value string) {
