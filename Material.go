@@ -276,6 +276,6 @@ func (m *Material) GetMaterialTexture(typ TextureType, textureIndex int) (string
 	var op C.enum_aiTextureOp
 	var mapmode C.enum_aiTextureMapMode
 	var flags C.uint
-	ret := C.aiGetMaterialTexture(mat, typ_, index, &path, &mapping, &uvindex, &(blend), &op, &mapmode, &flags)
+	ret := C.aiGetMaterialTexture(mat, typ_, index, &path, &mapping, &uvindex, &blend, &op, &mapmode, &flags)
 	return C.GoString(&path.data[0]), TextureMapping(mapping), int(uvindex), float32(blend), TextureOp(op), TextureMapMode(mapmode), uint(flags), Return(ret)
 }
