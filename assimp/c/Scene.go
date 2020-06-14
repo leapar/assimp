@@ -4,7 +4,6 @@ package c
 import "C"
 
 import (
-	"fmt"
 	"reflect"
 	"unsafe"
 )
