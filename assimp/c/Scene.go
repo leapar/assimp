@@ -157,6 +157,11 @@ func (this *Node) Meshes() []int32 {
 	}
 }
 
+
+func (this *Node) MetaData() *Metadata {
+	return (*Metadata)(this.mMetaData)
+}
+
 const (
 	SceneFlags_Incomplete        = C.AI_SCENE_FLAGS_INCOMPLETE
 	SceneFlags_Validated         = C.AI_SCENE_FLAGS_VALIDATED

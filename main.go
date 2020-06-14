@@ -30,6 +30,7 @@ func main()  {
 
 	s := model.Scene{}
 	s.Convert(scene)
-
+	p := s.MetaData["UnitScaleFactor"]
+	fmt.Println(p)
 	//fmt.Println(s)
 }
