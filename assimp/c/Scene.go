@@ -95,7 +95,7 @@ func (this *Metadata) Values() []MetadataEntry {
 		header.Cap = int(this.mNumProperties)
 		header.Len = int(this.mNumProperties)
 		header.Data = uintptr(unsafe.Pointer(this.mValues))
-		fmt.Println(result[0].mType, MetadataType(result[0].mType) == AI_BOOL, AI_INT32 == MetadataType(result[0].mType))
+		//fmt.Println(result[0].mType, MetadataType(result[0].mType) == AI_BOOL, AI_INT32 == MetadataType(result[0].mType))
 
 		for _, i2 := range result {
 			ret = append(ret, MetadataEntry(i2))

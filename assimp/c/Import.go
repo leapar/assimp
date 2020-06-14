@@ -62,6 +62,19 @@ func ImportFileFromMemoryWithProperties(data []byte, flags uint, hint string, pr
 	return (*Scene)(C.aiImportFileFromMemoryWithProperties(pBuffer, pLength, pFlags, pHint, pProps))
 }
 
+func ImportFileFromMemorySimple(data []byte) *Scene {
+	pBuffer := (*C.char)(unsafe.Pointer(((*reflect.SliceHeader)(unsafe.Pointer(&data))).Data))
+	pLength := C.uint(len(data))
+	pFlags := C.uint(Process_Triangulate|Process_GenSmoothNormals|Process_JoinIdenticalVertices)
+	props := (*PropertyStore)(C.aiCreatePropertyStore())
+	defer func() {
+		C.aiReleasePropertyStore((*C.struct_aiPropertyStore)(props))
+	}()
+	props.SetPropertyFloat("PP_GSN_MAX_SMOOTHING_ANGLE",30.0)
+	return (*Scene)(C.aiImportFileFromMemoryWithProperties(pBuffer, pLength, pFlags, nil, (*C.struct_aiPropertyStore)(props)))
+
+}
+
 func ImportFileExWithProperties(file string) *Scene {
 	pFile := C.CString(file)
 	defer C.free(unsafe.Pointer(pFile))

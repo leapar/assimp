@@ -24,12 +24,12 @@ func main()  {
 	fmt.Println("Light num:",scene.NumLights())
 	fmt.Println("Camera num:",scene.NumCameras())
 
-	fmt.Println("metadata:",scene.MetaData())
-	fmt.Println("metadata:",scene.MetaData().Keys() )
-	fmt.Println("metadata:",scene.MetaData().Values() )
+//	fmt.Println("metadata:",scene.MetaData())
+//	fmt.Println("metadata:",scene.MetaData().Keys() )
+//	fmt.Println("metadata:",scene.MetaData().Values() )
 
 	s := model.Scene{}
 	s.Convert(scene)
 
-	fmt.Println(s)
+	//fmt.Println(s)
 }
