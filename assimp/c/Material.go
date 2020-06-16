@@ -8,6 +8,7 @@ package c
 import "C"
 
 import (
+	"assimp/assimp/math"
 	"reflect"
 	"unsafe"
 )
@@ -139,6 +140,45 @@ func (mp *MaterialProperty) Type() PropertyTypeInfo {
 	return PropertyTypeInfo(mp.mType)
 }
 
+func (mp *MaterialProperty) Float32Data() []float32 {
+	if mp.mData != nil {
+		var result []float32
+		header := (*reflect.SliceHeader)(unsafe.Pointer(&result))
+		header.Cap = int(mp.mDataLength / 4)
+		header.Len = int(mp.mDataLength / 4)
+		header.Data = uintptr(unsafe.Pointer(mp.mData))
+		return result
+	} else {
+		return nil
+	}
+}
+
+func (mp *MaterialProperty) Float64Data() []float64{
+	if mp.mData != nil {
+		var result []float64
+		header := (*reflect.SliceHeader)(unsafe.Pointer(&result))
+		header.Cap = int(mp.mDataLength / 8)
+		header.Len = int(mp.mDataLength / 8)
+		header.Data = uintptr(unsafe.Pointer(mp.mData))
+		return result
+	} else {
+		return nil
+	}
+}
+
+func (mp *MaterialProperty) Int32Data() []int32{
+	if mp.mData != nil {
+		var result []int32
+		header := (*reflect.SliceHeader)(unsafe.Pointer(&result))
+		header.Cap = int(mp.mDataLength / 8)
+		header.Len = int(mp.mDataLength / 8)
+		header.Data = uintptr(unsafe.Pointer(mp.mData))
+		return result
+	} else {
+		return nil
+	}
+}
+
 func (mp *MaterialProperty) Data() []byte {
 	if mp.mData != nil {
 		var result []byte
@@ -151,6 +191,23 @@ func (mp *MaterialProperty) Data() []byte {
 		return nil
 	}
 }
+
+func (mp *MaterialProperty) StringData() string {
+	if mp.mData != nil {
+		var result []byte
+		header := (*reflect.SliceHeader)(unsafe.Pointer(&result))
+		header.Cap = int(mp.mDataLength)
+		header.Len = int(mp.mDataLength)
+		header.Data = uintptr(unsafe.Pointer(mp.mData))
+
+		len := math.Byte4ToInt(result[:4])
+		return string(result[4:4+len])//前4个是长度
+	} else {
+		return ""
+	}
+}
+
+
 
 type Material C.struct_aiMaterial
 

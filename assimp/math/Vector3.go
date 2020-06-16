@@ -16,6 +16,11 @@ func NewVector3(x, y, z float64) *Vector3 {
 	}
 }
 
+func (this *Vector3)Tolist() []float64{
+	return []float64{this.X,this.Y,this.Z}
+}
+
+
 func (this *Vector3) ApplyQuaternion(q *Quaternion) *Vector3 {
 
 	var x = this.X
@@ -109,6 +114,7 @@ func (this *Vector3) Add(v *Vector3) *Vector3 {
 
 }
 
+//向量叉乘，得到垂直于两个向量所在平面的向量
 func (this *Vector3) CrossVectors(a, b *Vector3) *Vector3 {
 
 	var ax = a.X
@@ -148,4 +154,13 @@ func (this *Vector3) DistanceToSquared(v *Vector3) float64 {
 	var dy = this.Y - v.Y
 	var dz = this.Z - v.Z
 	return dx*dx + dy*dy + dz*dz
+}
+
+
+func (this *Vector3)ToBytes()[]byte  {
+	f := make([]byte,0)
+	f = append(f,Float32ToByte(float32(this.X))...)
+	f = append(f,Float32ToByte(float32(this.Y))...)
+	f = append(f,Float32ToByte(float32(this.Z))...)
+	return f
 }

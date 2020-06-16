@@ -30,6 +30,11 @@ func clamp(value, min, max float64) float64 {
 	return math.Max(min, math.Min(max, value))
 }
 
+func NewEuler0()*Euler{
+	return &Euler{
+	}
+}
+
 func NewEuler(x, y, z float64) *Euler {
 	return &Euler{
 		x,
@@ -37,6 +42,27 @@ func NewEuler(x, y, z float64) *Euler {
 		z,
 		"XYZ",
 	}
+}
+
+func (this *Euler) FromDirectionVector(direction *Vector3)*Euler  {
+	this.X = math.Atan2(-direction.X, direction.Y)
+	this.Y = math.Asin(direction.Z)
+	this.Z = 0
+	return  this
+}
+/*
+   self.yaw = yaw
+   self.pitch = pitch
+   self.roll = roll
+*/
+/*
+   def from_direction_vector(direction):
+       yaw = math.atan2(-direction[0], direction[1])
+       pitch = math.asin(direction[2])
+       return _Euler(yaw, pitch, 0)
+*/
+func (this *Euler) ToListInDegrees()[]float64 {
+	return []float64{RadToDeg(this.X),RadToDeg(this.Y),RadToDeg(this.Z)}
 }
 
 func (this *Euler) SetFromQuaternion(q *Quaternion) *Euler {

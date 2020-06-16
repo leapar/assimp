@@ -4,8 +4,6 @@ import "C"
 import (
 	"assimp/assimp/c"
 	"assimp/assimp/math"
-	"encoding/binary"
-	_math "math"
 )
 
 type Mesh struct {
@@ -17,7 +15,7 @@ type Mesh struct {
 	Bitangents    []*math.Vector3
 	Colors        []*math.Color
 	TextureCoords []*math.Vector3
-	Faces         []uint32
+	Faces         [][]uint32
 }
 
 type Light struct {
@@ -79,7 +77,7 @@ func (this *Scene) convertMeshes(src []*c.Mesh) []*Mesh {
 		meshes = append(meshes, mesh)
 		mesh.Name = v.Name()
 		mesh.Materialindex = v.MaterialIndex()
-		mesh.Vertices = make([]*math.Vector3, v.NumVertices())
+		mesh.Vertices = make([]*math.Vector3, 0)
 		for _, v2 := range v.Vertices() {
 			mesh.Vertices = append(mesh.Vertices, math.NewVector3(float64(v2.X()), float64(v2.Y()), float64(v2.Z())))
 		}
@@ -120,9 +118,10 @@ func (this *Scene) convertMeshes(src []*c.Mesh) []*Mesh {
 			}
 		}
 
-		mesh.Faces = make([]uint32, v.NumFaces())
-		for _, face := range v.Faces() {
-			mesh.Faces = append(mesh.Faces, face.CopyIndices()...)
+		mesh.Faces = make([][]uint32, v.NumFaces())
+		for index, face := range v.Faces() {
+			mesh.Faces[index] = make([]uint32,0)
+			mesh.Faces[index] = append(mesh.Faces[index], face.CopyIndices()...)
 		}
 	}
 
@@ -142,32 +141,21 @@ func (this *Scene) convertLights(src []*c.Light) {
 	}
 }
 
-func byteToFloat32(bytes []byte) float32 {
-	bits := binary.LittleEndian.Uint32(bytes)
-	return _math.Float32frombits(bits)
-}
 
-func byteToFloat64(bytes []byte) float64 {
-	bits := binary.LittleEndian.Uint64(bytes)
-	return _math.Float64frombits(bits)
-}
 
-func byteToInt(bytes []byte) int {
-	return int(binary.LittleEndian.Uint64(bytes))
-}
 
 func getPropVal(prop *c.MaterialProperty) interface{} {
 	switch prop.Type() {
 	case c.PTI_Float:
-
-		return byteToFloat32([]byte(prop.Data()))
+		return prop.Float32Data()
 	case c.PTI_Double:
-		return byteToFloat64([]byte(prop.Data()))
+		return prop.Float64Data()
 	case c.PTI_String:
 
-		return string([]byte(prop.Data()))
+
+		return prop.StringData()
 	case c.PTI_Integer:
-		return byteToInt([]byte(prop.Data()))
+		return prop.Int32Data()
 	case c.PTI_Buffer:
 		return []byte(prop.Data())
 	}
